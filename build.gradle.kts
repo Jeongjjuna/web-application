@@ -10,6 +10,12 @@ repositories {
 }
 
 dependencies {
+    // 로깅 라이브러리 - slf4j -> logback
+    implementation("ch.qos.logback:logback-classic:1.4.14")
+    implementation("ch.qos.logback:logback-core:1.4.14")
+    implementation("org.slf4j:slf4j-api:2.0.11")
+
+    // 테스트 라이브러리 - junit, assertj
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
     testImplementation("org.assertj:assertj-core:3.26.3")
 }
