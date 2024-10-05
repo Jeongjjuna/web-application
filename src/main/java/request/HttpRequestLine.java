@@ -14,6 +14,10 @@ public class HttpRequestLine {
         this.version = lineTokens[2];
     }
 
+    public HttpMethod getMethod() {
+        return method;
+    }
+
     public String getUrl() {
         return url;
     }

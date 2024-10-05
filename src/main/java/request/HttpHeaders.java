@@ -2,6 +2,7 @@ package request;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class HttpHeaders {
 
@@ -14,5 +15,11 @@ public class HttpHeaders {
     public String add(String key, String value) {
         headers.put(key, value);
         return key;
+    }
+
+    public int getContentLength() {
+        return Optional.ofNullable(headers.get("Content-Length"))
+                .map(Integer::parseInt)
+                .orElse(0);
     }
 }
