@@ -25,7 +25,7 @@ public class WebApplicationServer {
 
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            log.info("[INFO] 서버가 시작되었습니다 : {}", port);
+            log.info("서버가 시작되었습니다 : {}", port);
 
             Socket clientSocket;
             while ((clientSocket = serverSocket.accept()) != null) {
@@ -34,7 +34,7 @@ public class WebApplicationServer {
             }
 
         } catch (IOException e) {
-            log.error("[ERROR] {}", e.getMessage());
+            log.error("{}", e.getMessage());
         }
     }
 }

@@ -1,5 +1,7 @@
+import exception.BaseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.HttpRequest;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -27,10 +29,13 @@ public class RequestHandler implements Runnable {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
             DataOutputStream dos = new DataOutputStream(out);
 
-            String line;
-            while ((line = br.readLine()) != null) {
-                System.out.println(line);
-            }
+            HttpRequest httpRequest = HttpRequestParser.getHttpRequest(br);
+
+            String requestUrl = httpRequest.getUrl();
+
+            // TODO("requestUrl 파일 읽기")
+
+            // TODO("requestUrl 파일 응답")
 
             dos.writeBytes("ex) 응답헤더");
 
@@ -38,6 +43,10 @@ public class RequestHandler implements Runnable {
             dos.write(body, 0, body.length);
             dos.flush();
         } catch (IOException e) {
+            log.error(e.getMessage());
+        } catch (BaseException e) {
+            log.error(e.getMessage());
+        } catch (Exception e) {
             log.error(e.getMessage());
         }
     }
