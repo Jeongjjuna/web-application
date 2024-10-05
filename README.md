@@ -62,3 +62,5 @@
 ---
 ### 요구사항
 1. http://localhost:8080/index.html GET 요청 시, webapp디렉토리의 index.html 파일을 응답한다.
+2. http://localhost:8080/user/form.html GET 요청 시, webapp디렉토리의 form.html 파일을 응답한다.
+   - form.html 파일안에서 POST로 회원가입 요청을 한다.
