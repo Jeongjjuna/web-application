@@ -10,7 +10,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 public class RequestHandler implements Runnable {
 
@@ -24,6 +29,7 @@ public class RequestHandler implements Runnable {
 
     @Override
     public void run() {
+        log.info("[{}] : > 요청", Thread.currentThread().getName());
 
         try (InputStream in = clientSocket.getInputStream(); OutputStream out = clientSocket.getOutputStream()) {
             BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
@@ -33,21 +39,34 @@ public class RequestHandler implements Runnable {
 
             String requestUrl = httpRequest.getUrl();
 
-            // TODO("requestUrl 파일 읽기")
+            ClassLoader classLoader = Main.class.getClassLoader();
+            URL url = classLoader.getResource("./webapp" + requestUrl);
+            Objects.requireNonNull(url);
+            Path path = Paths.get(url.toURI());
+            byte[] body = Files.readAllBytes(path);
 
-            // TODO("requestUrl 파일 응답")
+            response200Header(dos, body.length);
+            responseBody(dos, body);
 
-            dos.writeBytes("ex) 응답헤더");
-
-            byte[] body = "ex) 응답바디".getBytes();
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
         } catch (BaseException e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e.getMessage(), e);
+        } finally {
+            log.info("[{}] : < 응답", Thread.currentThread().getName());
         }
     }
+
+    private void response200Header(DataOutputStream dos, int bodyLength) throws IOException {
+        dos.writeBytes("HTTP/1.1 200 OK \r\n");
+        dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
+        dos.writeBytes("Content-Length: " + bodyLength + "\r\n");
+        dos.writeBytes("\r\n");
+    }
+
+    private void responseBody(DataOutputStream dos, byte[] body) throws IOException {
+        dos.write(body, 0, body.length);
+        dos.flush();
+    }
+
 }

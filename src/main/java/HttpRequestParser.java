@@ -11,7 +11,6 @@ public class HttpRequestParser {
     public static HttpRequest getHttpRequest(BufferedReader br) throws IOException {
         HttpRequestLine httpRequestLine = getRequestLine(br);
         HttpHeaders httpHeaders = getHttpRequestHeaders(br);
-
         return new HttpRequest(httpRequestLine, httpHeaders);
     }
 
@@ -25,11 +24,17 @@ public class HttpRequestParser {
         HttpHeaders httpHeaders = new HttpHeaders();
         String line;
         while ((line = br.readLine()) != null) {
+
+            if (line.isEmpty()) {
+                break;
+            }
+
             String[] tokens = StringUtils.split(line, ":");
             String key = tokens[0];
             String value = StringUtils.trim(tokens[1]);
             httpHeaders.add(key, value);
         }
+
         return httpHeaders;
     }
 

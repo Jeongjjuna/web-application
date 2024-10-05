@@ -1,3 +1,3 @@
-### GET request to example server
-GET http://localhost:8080/member?name=jihun
+### 요구사항 1. index.html 응답하기
+GET http://localhost:8080/index.html
 ###
