@@ -1,7 +1,10 @@
 import exception.BaseException;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import request.HttpMethod;
 import request.HttpRequest;
+import request.HttpRequestBody;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -15,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Objects;
 
 public class RequestHandler implements Runnable {
@@ -36,18 +40,36 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequestParser.getHttpRequest(br);
-
+            HttpMethod httpMethod = httpRequest.getHttpMethod();
             String requestUrl = httpRequest.getUrl();
 
-            URL url = getClass()
-                    .getClassLoader()
-                    .getResource("./webapp" + requestUrl);
-            Objects.requireNonNull(url);
-            Path path = Paths.get(url.toURI());
-            byte[] body = Files.readAllBytes(path);
+            if (httpMethod == HttpMethod.GET) {
+                URL url = getClass()
+                        .getClassLoader()
+                        .getResource("./webapp" + requestUrl);
+                Objects.requireNonNull(url);
+                Path path = Paths.get(url.toURI());
+                byte[] body = Files.readAllBytes(path);
 
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
+
+            if (httpMethod == HttpMethod.POST) {
+                if (requestUrl.equals("/user/create")) {
+                    HttpRequestBody httpRequestBody = httpRequest.getHttpRequestBody();
+                    Map<String, String> bodyData = httpRequestBody.getBody();
+                    User user = new User(
+                            bodyData.get("username"),
+                            bodyData.get("email"),
+                            bodyData.get("password")
+                    );
+
+                    // TODO("저장기능 구현")
+                    response200Header(dos, 0);
+                    responseBody(dos, new byte[0]);
+                }
+            }
 
         } catch (BaseException e) {
             log.error(e.getMessage(), e);
