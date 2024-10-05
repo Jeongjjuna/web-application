@@ -39,8 +39,9 @@ public class RequestHandler implements Runnable {
 
             String requestUrl = httpRequest.getUrl();
 
-            ClassLoader classLoader = Main.class.getClassLoader();
-            URL url = classLoader.getResource("./webapp" + requestUrl);
+            URL url = getClass()
+                    .getClassLoader()
+                    .getResource("./webapp" + requestUrl);
             Objects.requireNonNull(url);
             Path path = Paths.get(url.toURI());
             byte[] body = Files.readAllBytes(path);
