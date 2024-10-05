@@ -21,4 +21,13 @@ public class HttpRequestLine {
     public String getUrl() {
         return url;
     }
+
+    public boolean isGetRequest() {
+        return method == HttpMethod.GET;
+    }
+
+    public boolean isPostRequest() {
+        return method == HttpMethod.POST;
+    }
+
 }

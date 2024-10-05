@@ -24,4 +24,12 @@ public class HttpRequest {
     public HttpRequestBody getHttpRequestBody() {
         return httpRequestBody;
     }
+
+    public boolean isGetRequest() {
+        return httpRequestLine.isGetRequest();
+    }
+
+    public boolean isPostRequest() {
+        return httpRequestLine.isPostRequest();
+    }
 }

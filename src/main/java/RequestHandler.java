@@ -2,7 +2,6 @@ import exception.BaseException;
 import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import request.HttpMethod;
 import request.HttpRequest;
 import request.HttpRequestBody;
 
@@ -19,7 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.Objects;
 
 public class RequestHandler implements Runnable {
 
@@ -40,14 +38,17 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequestParser.getHttpRequest(br);
-            HttpMethod httpMethod = httpRequest.getHttpMethod();
             String requestUrl = httpRequest.getUrl();
 
-            if (httpMethod == HttpMethod.GET) {
+            if (httpRequest.isGetRequest()) {
                 URL url = getClass()
                         .getClassLoader()
                         .getResource("./webapp" + requestUrl);
-                Objects.requireNonNull(url);
+
+                if (url == null) {
+                    throw new BaseException("[ERROR] Not Found Resource");
+                }
+
                 Path path = Paths.get(url.toURI());
                 byte[] body = Files.readAllBytes(path);
 
@@ -55,7 +56,7 @@ public class RequestHandler implements Runnable {
                 responseBody(dos, body);
             }
 
-            if (httpMethod == HttpMethod.POST) {
+            if (httpRequest.isPostRequest()) {
                 if (requestUrl.equals("/user/create")) {
                     HttpRequestBody httpRequestBody = httpRequest.getHttpRequestBody();
                     Map<String, String> bodyData = httpRequestBody.getBody();
@@ -72,7 +73,7 @@ public class RequestHandler implements Runnable {
             }
 
         } catch (BaseException e) {
-            log.error(e.getMessage(), e);
+            log.error(e.getMessage());
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
