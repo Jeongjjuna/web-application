@@ -1,3 +1,4 @@
+import db.DataBase;
 import exception.BaseException;
 import model.User;
 import org.slf4j.Logger;
@@ -66,9 +67,27 @@ public class RequestHandler implements Runnable {
                             bodyData.get("password")
                     );
 
-                    // TODO("저장기능 구현")
+                    DataBase.addUser(user);
+
                     response302Header(dos, 0);
                     responseBody(dos, new byte[0]);
+                }
+
+                if (requestUrl.equals("/user/login")) {
+                    HttpRequestBody httpRequestBody = httpRequest.getHttpRequestBody();
+                    Map<String, String> bodyData = httpRequestBody.getBody();
+                    String username = bodyData.get("username");
+
+                    User user = DataBase.findUserByUsername(username)
+                            .orElseThrow(() -> new BaseException("[ERROR] Not Found User"));
+
+                    if (user.isSamePassword(bodyData.get("password"))) {
+                        response302LoginSuccessHeader(dos);
+                    } else {
+                        response302Header(dos, 0);
+                        responseBody(dos, new byte[0]);
+                    }
+
                 }
             }
 
@@ -81,6 +100,7 @@ public class RequestHandler implements Runnable {
         }
     }
 
+
     private void response200Header(DataOutputStream dos, int bodyLength) throws IOException {
         dos.writeBytes("HTTP/1.1 200 OK \r\n");
         dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
@@ -90,8 +110,15 @@ public class RequestHandler implements Runnable {
 
     private void response302Header(DataOutputStream dos, int bodyLength) throws IOException {
         dos.writeBytes("HTTP/1.1 302 Found \r\n");
-        dos.writeBytes("Location: /index.html\r\n");
+        dos.writeBytes("Location: /index.html \r\n");
         dos.writeBytes("Content-Length: " + bodyLength + "\r\n");
+        dos.writeBytes("\r\n");
+    }
+
+    private void response302LoginSuccessHeader(DataOutputStream dos) throws IOException {
+        dos.writeBytes("HTTP/1.1 302 Found \r\n");
+        dos.writeBytes("Set-Cookie: logined=true; Path=/ \r\n");
+        dos.writeBytes("Location: /index.html \r\n");
         dos.writeBytes("\r\n");
     }
 
