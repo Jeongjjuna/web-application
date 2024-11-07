@@ -69,25 +69,30 @@ public class RequestHandler implements Runnable {
 
                     DataBase.addUser(user);
 
-                    response302Header(dos, 0);
+                    response302Header(dos, 0, "/index.html");
                     responseBody(dos, new byte[0]);
                 }
 
                 if (requestUrl.equals("/user/login")) {
-                    HttpRequestBody httpRequestBody = httpRequest.getHttpRequestBody();
-                    Map<String, String> bodyData = httpRequestBody.getBody();
-                    String username = bodyData.get("username");
+                    try {
+                        HttpRequestBody httpRequestBody = httpRequest.getHttpRequestBody();
+                        Map<String, String> bodyData = httpRequestBody.getBody();
+                        String username = bodyData.get("username");
 
-                    User user = DataBase.findUserByUsername(username)
-                            .orElseThrow(() -> new BaseException("[ERROR] Not Found User"));
+                        User user = DataBase.findUserByUsername(username)
+                                .orElseThrow(() -> new BaseException("[ERROR] Not Found User"));
 
-                    if (user.isSamePassword(bodyData.get("password"))) {
-                        response302LoginSuccessHeader(dos);
-                    } else {
-                        response302Header(dos, 0);
+                        if (user.isSamePassword(bodyData.get("password"))) {
+                            response302LoginSuccessHeader(dos);
+                        } else {
+                            response302Header(dos, 0, "/user/login_failed.html");
+                            responseBody(dos, new byte[0]);
+                        }
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                        response302Header(dos, 0, "/user/login_failed.html");
                         responseBody(dos, new byte[0]);
                     }
-
                 }
             }
 
@@ -108,9 +113,9 @@ public class RequestHandler implements Runnable {
         dos.writeBytes("\r\n");
     }
 
-    private void response302Header(DataOutputStream dos, int bodyLength) throws IOException {
+    private void response302Header(DataOutputStream dos, int bodyLength, String url) throws IOException {
         dos.writeBytes("HTTP/1.1 302 Found \r\n");
-        dos.writeBytes("Location: /index.html \r\n");
+        dos.writeBytes("Location: "+ url +" \r\n");
         dos.writeBytes("Content-Length: " + bodyLength + "\r\n");
         dos.writeBytes("\r\n");
     }
