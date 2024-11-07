@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class RequestHandler implements Runnable {
@@ -42,19 +43,58 @@ public class RequestHandler implements Runnable {
             String requestUrl = httpRequest.getUrl();
 
             if (httpRequest.isGetRequest()) {
-                URL url = getClass()
-                        .getClassLoader()
-                        .getResource("./webapp" + requestUrl);
+                if (requestUrl.equals("/user/list")) {
+                    if (httpRequest.isLogined()) {
 
-                if (url == null) {
-                    throw new BaseException("[ERROR] Not Found Resource");
+                        StringBuilder html = new StringBuilder();
+                        html.append("<!DOCTYPE html>\n")
+                                .append("<html lang=\"ko\">\n")
+                                .append("<head>\n")
+                                .append("    <meta charset=\"UTF-8\">\n")
+                                .append("    <title>Web Application Study</title>\n")
+                                .append("</head>\n")
+                                .append("<body>\n")
+                                .append("    <div>사용자 리스트</div>\n")
+                                .append("\n")
+                                .append("    <ul>\n")
+                                .append("        <li><a href=\"/index.html\" role=\"button\">홈 페이지</a></li>\n")
+                                .append("        <li><a href=\"/user/login.html\" role=\"button\">로그인 페이지</a></li>\n")
+                                .append("        <li><a href=\"/user/form.html\" role=\"button\">회원가입 페이지</a></li>\n")
+                                .append("    </ul>\n")
+                                .append("    <ul>\n");
+
+                        List<User> users =  DataBase.findAll();
+                        for (User user : users) {
+                            html.append("        <li>" + user.getEmail() + "</li>\n");
+                        }
+
+                        html.append("    </ul>\n")
+                            .append("</body>\n")
+                            .append("</html>");
+
+                        byte[] body = html.toString().getBytes(StandardCharsets.UTF_8);
+
+                        response200Header(dos, body.length);
+                        responseBody(dos, body);
+                    } else {
+                        response302Header(dos, 0, "/index.html");
+                        responseBody(dos, new byte[0]);
+                    }
+                } else {
+                    URL url = getClass()
+                            .getClassLoader()
+                            .getResource("./webapp" + requestUrl);
+
+                    if (url == null) {
+                        throw new BaseException("[ERROR] Not Found Resource");
+                    }
+
+                    Path path = Paths.get(url.toURI());
+                    byte[] body = Files.readAllBytes(path);
+
+                    response200Header(dos, body.length);
+                    responseBody(dos, body);
                 }
-
-                Path path = Paths.get(url.toURI());
-                byte[] body = Files.readAllBytes(path);
-
-                response200Header(dos, body.length);
-                responseBody(dos, body);
             }
 
             if (httpRequest.isPostRequest()) {

@@ -83,3 +83,5 @@
    - 로그인에 실패하면 login_failed.html 파일로 이동한다.
    - 응답헤더에 쿠키를 활용해 logined=true(로그인 성공 여부)를 추가한다.
    - 로그인기능을 위해 로컬 저장소(DataBase)에 저장한다.
+4. http://localhost:8080/user/list GET 요청 시, 동적으로 생성한 html 을 응답으로 보낸다.
+   - 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
