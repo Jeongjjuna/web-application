@@ -32,4 +32,8 @@ public class HttpRequest {
     public boolean isPostRequest() {
         return httpRequestLine.isPostRequest();
     }
+
+    public boolean isLogined() {
+        return httpHeaders.isLogined();
+    }
 }

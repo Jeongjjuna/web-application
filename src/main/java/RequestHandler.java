@@ -18,6 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
 
 public class RequestHandler implements Runnable {
@@ -42,19 +43,58 @@ public class RequestHandler implements Runnable {
             String requestUrl = httpRequest.getUrl();
 
             if (httpRequest.isGetRequest()) {
-                URL url = getClass()
-                        .getClassLoader()
-                        .getResource("./webapp" + requestUrl);
+                if (requestUrl.equals("/user/list")) {
+                    if (httpRequest.isLogined()) {
 
-                if (url == null) {
-                    throw new BaseException("[ERROR] Not Found Resource");
+                        StringBuilder html = new StringBuilder();
+                        html.append("<!DOCTYPE html>\n")
+                                .append("<html lang=\"ko\">\n")
+                                .append("<head>\n")
+                                .append("    <meta charset=\"UTF-8\">\n")
+                                .append("    <title>Web Application Study</title>\n")
+                                .append("</head>\n")
+                                .append("<body>\n")
+                                .append("    <div>사용자 리스트</div>\n")
+                                .append("\n")
+                                .append("    <ul>\n")
+                                .append("        <li><a href=\"/index.html\" role=\"button\">홈 페이지</a></li>\n")
+                                .append("        <li><a href=\"/user/login.html\" role=\"button\">로그인 페이지</a></li>\n")
+                                .append("        <li><a href=\"/user/form.html\" role=\"button\">회원가입 페이지</a></li>\n")
+                                .append("    </ul>\n")
+                                .append("    <ul>\n");
+
+                        List<User> users =  DataBase.findAll();
+                        for (User user : users) {
+                            html.append("        <li>" + user.getEmail() + "</li>\n");
+                        }
+
+                        html.append("    </ul>\n")
+                            .append("</body>\n")
+                            .append("</html>");
+
+                        byte[] body = html.toString().getBytes(StandardCharsets.UTF_8);
+
+                        response200Header(dos, body.length);
+                        responseBody(dos, body);
+                    } else {
+                        response302Header(dos, 0, "/index.html");
+                        responseBody(dos, new byte[0]);
+                    }
+                } else {
+                    URL url = getClass()
+                            .getClassLoader()
+                            .getResource("./webapp" + requestUrl);
+
+                    if (url == null) {
+                        throw new BaseException("[ERROR] Not Found Resource");
+                    }
+
+                    Path path = Paths.get(url.toURI());
+                    byte[] body = Files.readAllBytes(path);
+
+                    response200Header(dos, body.length);
+                    responseBody(dos, body);
                 }
-
-                Path path = Paths.get(url.toURI());
-                byte[] body = Files.readAllBytes(path);
-
-                response200Header(dos, body.length);
-                responseBody(dos, body);
             }
 
             if (httpRequest.isPostRequest()) {
@@ -69,25 +109,30 @@ public class RequestHandler implements Runnable {
 
                     DataBase.addUser(user);
 
-                    response302Header(dos, 0);
+                    response302Header(dos, 0, "/index.html");
                     responseBody(dos, new byte[0]);
                 }
 
                 if (requestUrl.equals("/user/login")) {
-                    HttpRequestBody httpRequestBody = httpRequest.getHttpRequestBody();
-                    Map<String, String> bodyData = httpRequestBody.getBody();
-                    String username = bodyData.get("username");
+                    try {
+                        HttpRequestBody httpRequestBody = httpRequest.getHttpRequestBody();
+                        Map<String, String> bodyData = httpRequestBody.getBody();
+                        String username = bodyData.get("username");
 
-                    User user = DataBase.findUserByUsername(username)
-                            .orElseThrow(() -> new BaseException("[ERROR] Not Found User"));
+                        User user = DataBase.findUserByUsername(username)
+                                .orElseThrow(() -> new BaseException("[ERROR] Not Found User"));
 
-                    if (user.isSamePassword(bodyData.get("password"))) {
-                        response302LoginSuccessHeader(dos);
-                    } else {
-                        response302Header(dos, 0);
+                        if (user.isSamePassword(bodyData.get("password"))) {
+                            response302LoginSuccessHeader(dos);
+                        } else {
+                            response302Header(dos, 0, "/user/login_failed.html");
+                            responseBody(dos, new byte[0]);
+                        }
+                    } catch (Exception e) {
+                        log.error(e.getMessage(), e);
+                        response302Header(dos, 0, "/user/login_failed.html");
                         responseBody(dos, new byte[0]);
                     }
-
                 }
             }
 
@@ -108,9 +153,9 @@ public class RequestHandler implements Runnable {
         dos.writeBytes("\r\n");
     }
 
-    private void response302Header(DataOutputStream dos, int bodyLength) throws IOException {
+    private void response302Header(DataOutputStream dos, int bodyLength, String url) throws IOException {
         dos.writeBytes("HTTP/1.1 302 Found \r\n");
-        dos.writeBytes("Location: /index.html \r\n");
+        dos.writeBytes("Location: "+ url +" \r\n");
         dos.writeBytes("Content-Length: " + bodyLength + "\r\n");
         dos.writeBytes("\r\n");
     }

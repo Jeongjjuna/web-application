@@ -22,4 +22,18 @@ public class HttpHeaders {
                 .map(Integer::parseInt)
                 .orElse(0);
     }
+
+    public boolean isLogined() {
+        if (headers.containsKey("Cookie")) {
+            String cookies = headers.get("Cookie");
+            String[] cookieArray = cookies.split(", ");
+            for (String cookie : cookieArray) {
+                if (cookie.equals("logined=true")) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
 }
