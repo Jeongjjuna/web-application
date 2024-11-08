@@ -63,14 +63,14 @@ public class RequestHandler implements Runnable {
                                 .append("    </ul>\n")
                                 .append("    <ul>\n");
 
-                        List<User> users =  DataBase.findAll();
+                        List<User> users = DataBase.findAll();
                         for (User user : users) {
                             html.append("        <li>" + user.getEmail() + "</li>\n");
                         }
 
                         html.append("    </ul>\n")
-                            .append("</body>\n")
-                            .append("</html>");
+                                .append("</body>\n")
+                                .append("</html>");
 
                         byte[] body = html.toString().getBytes(StandardCharsets.UTF_8);
 
@@ -80,6 +80,20 @@ public class RequestHandler implements Runnable {
                         response302Header(dos, 0, "/index.html");
                         responseBody(dos, new byte[0]);
                     }
+                } else if (requestUrl.equals("/css/styles.css")) {
+                    URL url = getClass()
+                            .getClassLoader()
+                            .getResource("./webapp" + requestUrl);
+
+                    if (url == null) {
+                        throw new BaseException("[ERROR] Not Found Resource");
+                    }
+
+                    Path path = Paths.get(url.toURI());
+                    byte[] body = Files.readAllBytes(path);
+
+                    responseCssHeader(dos, body.length);
+                    responseBody(dos, body);
                 } else {
                     URL url = getClass()
                             .getClassLoader()
@@ -143,6 +157,13 @@ public class RequestHandler implements Runnable {
         } finally {
             log.info("[{}] : < 응답", Thread.currentThread().getName());
         }
+    }
+
+    private void responseCssHeader(DataOutputStream dos, int bodyLength) throws IOException {
+        dos.writeBytes("HTTP/1.1 200 OK \r\n");
+        dos.writeBytes("Content-Type: text/css;charset=utf-8\r\n");
+        dos.writeBytes("Content-Length: " + bodyLength + "\r\n");
+        dos.writeBytes("\r\n");
     }
 
 
