@@ -16,7 +16,7 @@ dependencies {
     implementation("org.slf4j:slf4j-api:2.0.11")
 
     // 테스트 라이브러리 - junit, assertj
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
     testImplementation("org.assertj:assertj-core:3.26.3")
 }
 

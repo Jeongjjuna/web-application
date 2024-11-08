@@ -1,5 +1,6 @@
 package request;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -24,16 +25,10 @@ public class HttpHeaders {
     }
 
     public boolean isLogined() {
-        if (headers.containsKey("Cookie")) {
-            String cookies = headers.get("Cookie");
-            String[] cookieArray = cookies.split(", ");
-            for (String cookie : cookieArray) {
-                if (cookie.equals("logined=true")) {
-                    return true;
-                }
-            }
-        }
-        
-        return false;
+        return Optional.ofNullable(headers.get("Cookie"))
+                .map(cookies -> cookies.split(", "))
+                .stream()
+                .flatMap(Arrays::stream)
+                .anyMatch(cookie -> cookie.equals("logined=true"));
     }
 }
