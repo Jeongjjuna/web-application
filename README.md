@@ -67,8 +67,17 @@
 - "Location: user/login.html \r\n"
   - 경로의 맨 앞에 슬래시를 붙여주지 않으면 상대경로로 동작한다.
   - ex) localhost:8080/user/login.html 에서 상대경로로 이동하면 localhost:8080/user/user/login.html 이 된다.
-- html 의 <a> 태그의 src 에서도 슬래시(/)가 있어야 절대경로로 동작한다.
-  - <a href="/user/login.html" role="button">로그인 페이지</a>
+- html 의 \<a> 태그의 src 에서도 슬래시(/)가 있어야 절대경로로 동작한다.
+  - \<a href="/user/login.html" role="button">로그인 페이지\</a>
+
+</details>
+
+<details>
+    <summary> [요구사항 5] - css</summary>
+
+- <link rel="stylesheet" href="/css/styles.css"> 는 현재 html 에 적용할 css 파일을 요청하는 링크이다.
+- html 파일을 불러오면 브라우저가 GET / localhost:8080/css/styles.css 로 css 파일도 받아온다.
+  - 개발자 도구를 확인하면 index.html 과 styles.css 파일을 받아오기 위해 2번의 네트워크 통신이 이루어졌다.
 
 </details>
 
@@ -85,3 +94,6 @@
    - 로그인기능을 위해 로컬 저장소(DataBase)에 저장한다.
 4. http://localhost:8080/user/list GET 요청 시, 동적으로 생성한 html 을 응답으로 보낸다.
    - 로그인하지 않은 상태라면 로그인 페이지(login.html)로 이동한다.
+5. css 파일을 지원한다 지원한다.
+    - http://localhost:8080/css/styles.css GET 요청시, .css 를 응답해준다.
+ 
