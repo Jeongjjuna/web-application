@@ -18,17 +18,21 @@ public class HttpHeaders {
         return key;
     }
 
-    public int getContentLength() {
-        return Optional.ofNullable(headers.get("Content-Length"))
-                .map(Integer::parseInt)
-                .orElse(0);
-    }
-
     public boolean isLogined() {
         return Optional.ofNullable(headers.get("Cookie"))
                 .map(cookies -> cookies.split(", "))
                 .stream()
                 .flatMap(Arrays::stream)
                 .anyMatch(cookie -> cookie.equals("logined=true"));
+    }
+
+    public int getContentLength() {
+        return Optional.ofNullable(headers.get("Content-Length"))
+                .map(Integer::parseInt)
+                .orElse(0);
+    }
+
+    public String getHeader(String key) {
+        return headers.get(key);
     }
 }

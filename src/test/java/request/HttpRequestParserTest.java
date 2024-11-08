@@ -3,9 +3,14 @@ package request;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import utils.HttpRequestParser;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
-@DisplayName("[HttpRequestParser] 테스트")
+@DisplayName("[utils.HttpRequestParser] 테스트")
 class HttpRequestParserTest {
 
     /**
@@ -20,5 +25,19 @@ class HttpRequestParserTest {
         // when
 
         // then
+    }
+
+    @DisplayName("url 에서 path 경로를 가져올 수 있다.")
+    @ParameterizedTest(name = "{0}의 path 를 가져온다.")
+    @CsvSource({
+            "/user/create",
+            "/user/create?userId=gildong&password=password&name=hongildong"
+    })
+    void url에서_path를_가져올수있다(String url) {
+        // given & when
+        String path = HttpRequestParser.getPath(url);
+
+        // then
+        assertThat(path).isEqualTo("/user/create");
     }
 }

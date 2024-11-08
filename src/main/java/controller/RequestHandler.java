@@ -1,3 +1,5 @@
+package controller;
+
 import db.DataBase;
 import exception.BaseException;
 import model.User;
@@ -5,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import request.HttpRequest;
 import request.HttpRequestBody;
+import utils.HttpRequestParser;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -40,7 +43,7 @@ public class RequestHandler implements Runnable {
             DataOutputStream dos = new DataOutputStream(out);
 
             HttpRequest httpRequest = HttpRequestParser.getHttpRequest(br);
-            String requestUrl = httpRequest.getUrl();
+            String requestUrl = httpRequest.getPath();
 
             if (httpRequest.isGetRequest()) {
                 if (requestUrl.equals("/user/list")) {

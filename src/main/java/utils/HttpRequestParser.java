@@ -1,8 +1,9 @@
+package utils;
+
 import request.HttpHeaders;
 import request.HttpRequest;
 import request.HttpRequestBody;
 import request.HttpRequestLine;
-import utils.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +17,10 @@ public class HttpRequestParser {
         HttpHeaders httpHeaders = getHttpRequestHeaders(br);
         HttpRequestBody httpRequestBody = getHttpRequestBody(br, httpHeaders.getContentLength());
         return new HttpRequest(httpRequestLine, httpHeaders, httpRequestBody);
+    }
+
+    public static String getPath(String url) {
+        return url.split("\\?")[0];
     }
 
     private static HttpRequestLine getRequestLine(BufferedReader br) throws IOException {
