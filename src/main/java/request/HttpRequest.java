@@ -1,8 +1,6 @@
 package request;
 
 
-import utils.HttpRequestParser;
-
 import java.io.IOException;
 import java.io.InputStream;
 

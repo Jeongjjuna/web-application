@@ -10,9 +10,9 @@ public abstract class AbstractController implements Controller {
     public void service(HttpRequest request, HttpResponse response) {
         HttpMethod method = request.getMethod();
 
-        if (method == HttpMethod.POST) {
+        if (method.isPost()) {
             doPost(request, response);
-        } else if (method == HttpMethod.GET) {
+        } else if (method.isGet()) {
             doGet(request, response);
         }
     }

@@ -1,7 +1,5 @@
 package request;
 
-import utils.HttpRequestParser;
-
 import java.io.IOException;
 
 public class HttpRequestLine {

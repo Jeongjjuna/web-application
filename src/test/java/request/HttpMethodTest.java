@@ -4,14 +4,15 @@ import exception.BaseException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@DisplayName("[HttpMethod] 테스트")
+@DisplayName("[HttpMethod] 단위테스트")
 class HttpMethodTest {
 
-    @DisplayName("HTTP_METHOD 올바른 생성 테스트")
+    @DisplayName("HTTP_METHOD 를 생성할 수 있다.")
     @Test
     void HTTP_METHOD_생성테스트() {
         // given & when
@@ -25,7 +26,7 @@ class HttpMethodTest {
         );
     }
 
-    @DisplayName("HTTP_METHOD 생성시 지원하지 않는 타입에러")
+    @DisplayName("HTTP_METHOD 생성시 지원하지 않는 타입으로는 생성할 수 없다.")
     @Test
     void HTTP_METHOD_지원하지_않는_타입에러() {
         // given
@@ -36,6 +37,25 @@ class HttpMethodTest {
         assertAll(
                 () -> assertThrows(BaseException.class, () -> HttpMethod.create(invalid_input_1)),
                 () -> assertThrows(BaseException.class, () -> HttpMethod.create(invalid_input_2))
+        );
+    }
+
+    @DisplayName("GET 요청인지 알 수 있다.")
+    @Test
+    void GET요청확인하기() {
+        assertAll(
+                () -> assertThat(HttpMethod.GET.isGet()).isTrue(),
+                () -> assertThat(HttpMethod.POST.isGet()).isFalse()
+        );
+
+    }
+
+    @DisplayName("POST 요청인지 알 수 있다.")
+    @Test
+    void POST요청확인하기() {
+        assertAll(
+                () -> assertThat(HttpMethod.POST.isPost()).isTrue(),
+                () -> assertThat(HttpMethod.GET.isPost()).isFalse()
         );
     }
 }

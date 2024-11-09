@@ -1,5 +1,6 @@
 package response;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -7,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+@DisplayName("[HttpResponse] 단위테스트")
 class HttpResponseTest {
 
     private String testDirectory = "./src/test/resources/";

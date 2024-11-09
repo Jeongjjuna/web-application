@@ -5,12 +5,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import utils.HttpRequestParser;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@DisplayName("[utils.HttpRequestParser] 테스트")
+@DisplayName("[HttpRequestParser] 단위테스트")
 class HttpRequestParserTest {
 
     /**
