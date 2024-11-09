@@ -64,19 +64,27 @@ public class HttpResponse {
         }
     }
 
-    public void forwardBody(String data) throws IOException {
-        byte[] body = data.getBytes(StandardCharsets.UTF_8);
-        addheader("Content-Type", "text/html;charset=utf-8");
-        addheader("Content-Length", String.valueOf(body.length));
-        response200Header();
-        responseBody(body);
+    public void forwardBody(String data) {
+        try {
+            byte[] body = data.getBytes(StandardCharsets.UTF_8);
+            addheader("Content-Type", "text/html;charset=utf-8");
+            addheader("Content-Length", String.valueOf(body.length));
+            response200Header();
+            responseBody(body);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
     }
 
-    public void sendRedirect(String redirectUrl) throws IOException {
-        dos.writeBytes("HTTP/1.1 302 Found \r\n");
-        processHeaders();
-        dos.writeBytes("Location: " + redirectUrl + " \r\n");
-        dos.writeBytes("\r\n");
+    public void sendRedirect(String redirectUrl) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Found \r\n");
+            processHeaders();
+            dos.writeBytes("Location: " + redirectUrl + " \r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
     }
 
     public void addHeader(String key, String value) {

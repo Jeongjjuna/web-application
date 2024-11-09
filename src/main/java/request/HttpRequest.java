@@ -53,4 +53,8 @@ public class HttpRequest {
     public String getParameter(String key) {
         return httpRequestBody.getParameter(key);
     }
+
+    public HttpMethod getMethod() {
+        return httpRequestLine.getMethod();
+    }
 }
