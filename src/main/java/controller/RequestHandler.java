@@ -9,17 +9,10 @@ import response.HttpResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Map;
 
 public class RequestHandler implements Runnable {
 
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
-
-    private final Map<String, Controller> controllers = Map.of(
-            "/user/create", new CreateUserController(),
-            "/user/list", new ListUserController(),
-            "/user/login", new LoginController()
-    );
 
     private final Socket clientSocket;
 
@@ -38,7 +31,7 @@ public class RequestHandler implements Runnable {
 
             String path = httpRequest.getPath();
 
-            Controller controller = controllers.get(path);
+            Controller controller = RequestMapping.getController(path);
 
             /**
              * 해당하는 컨트롤러가 없다면, httpResponse forward 메서드를 호출
