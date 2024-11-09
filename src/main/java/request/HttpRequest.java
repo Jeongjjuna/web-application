@@ -1,6 +1,11 @@
 package request;
 
 
+import utils.HttpRequestParser;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 public class HttpRequest {
 
     private final HttpRequestLine httpRequestLine;
@@ -11,6 +16,10 @@ public class HttpRequest {
         this.httpRequestLine = httpRequestLine;
         this.httpHeaders = httpHeaders;
         this.httpRequestBody = httpRequestBody;
+    }
+
+    public static HttpRequest of(InputStream in) throws IOException {
+        return HttpRequestParser.getHttpRequest(in);
     }
 
     public boolean isGetRequest() {

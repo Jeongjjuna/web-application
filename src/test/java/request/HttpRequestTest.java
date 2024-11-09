@@ -2,11 +2,11 @@ package request;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import utils.HttpRequestParser;
 
-import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -26,10 +26,10 @@ class HttpRequestTest {
                 Accept: */*
                 
                 """;
-        BufferedReader br = new BufferedReader(new StringReader(request));
+        InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
 
         // when
-        HttpRequest httpRequest = HttpRequestParser.getHttpRequest(br);
+        HttpRequest httpRequest = HttpRequest.of(in);
 
         // then
         assertAll(
@@ -54,10 +54,10 @@ class HttpRequestTest {
                 
                 userId=gildong&password=password&name=hongildong
                 """;
-        BufferedReader br = new BufferedReader(new StringReader(request));
+        InputStream in = new ByteArrayInputStream(request.getBytes(StandardCharsets.UTF_8));
 
         // when
-        HttpRequest httpRequest = HttpRequestParser.getHttpRequest(br);
+        HttpRequest httpRequest = HttpRequest.of(in);
 
         // then
         assertAll(

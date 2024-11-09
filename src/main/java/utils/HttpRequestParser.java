@@ -7,12 +7,17 @@ import request.HttpRequestLine;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
 public class HttpRequestParser {
 
-    public static HttpRequest getHttpRequest(BufferedReader br) throws IOException {
+    public static HttpRequest getHttpRequest(InputStream in) throws IOException {
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+
         HttpRequestLine httpRequestLine = getRequestLine(br);
         HttpHeaders httpHeaders = getHttpRequestHeaders(br);
         HttpRequestBody httpRequestBody = getHttpRequestBody(br, httpHeaders.getContentLength());
