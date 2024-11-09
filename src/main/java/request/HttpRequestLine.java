@@ -14,14 +14,6 @@ public class HttpRequestLine {
         this.version = lineTokens[2];
     }
 
-    public HttpMethod getMethod() {
-        return method;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
     public boolean isGetRequest() {
         return method == HttpMethod.GET;
     }
@@ -30,4 +22,11 @@ public class HttpRequestLine {
         return method == HttpMethod.POST;
     }
 
+    public HttpMethod getMethod() {
+        return method;
+    }
+
+    public String getPath() {
+        return HttpRequestParser.getPath(url);
+    }
 }

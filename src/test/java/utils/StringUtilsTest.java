@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 
-@DisplayName("[StringUtils] 테스트")
+@DisplayName("[StringUtils] 단위테스트")
 class StringUtilsTest {
 
     @DisplayName("[trim] 문자열 양쪽 공백 제거")

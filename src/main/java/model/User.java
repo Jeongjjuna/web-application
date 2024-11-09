@@ -20,10 +20,6 @@ public class User {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public boolean isSamePassword(String password) {
         return this.password.equals(password);
     }

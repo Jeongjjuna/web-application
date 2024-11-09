@@ -1,0 +1,21 @@
+HTTP/1.1 200 OK 
+Content-Length: 487 
+Content-Type: text/html;charset=utf-8 
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Application Study</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="title">질문 답변 게시판</div>
+
+    <ul>
+        <li><a href="/user/login.html" role="button">로그인</a></li>
+        <li><a href="/user/form.html" role="button">회원가입</a></li>
+        <li><a href="/user/list" role="button">유저목록 페이지</a></li>
+    </ul>
+</body>
+</html>

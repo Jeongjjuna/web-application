@@ -1,9 +1,9 @@
-## 웹 애플리케이션 & MVC 프레임워크 구현 저장소
+# 웹 애플리케이션 & MVC 프레임워크 구현 저장소
 
 - [자바 웹 프로그래밍 Next Step(박재성님)](https://product.kyobobook.co.kr/detail/S000001624682) 책을 보며 학습합니다.
 
 ---
-### 🌱 새로 알게된 학습 내용
+## 🌱 새로 알게된 학습 내용
 
 <details>
     <summary> [요구사항 1] - java I/O </summary>
@@ -82,7 +82,9 @@
 </details>
 
 ---
-### 요구사항
+## 요구사항
+
+### 웹 서버 구현
 1. http://localhost:8080/index.html GET 요청 시, webapp디렉토리의 index.html 파일을 응답한다.
 2. http://localhost:8080/user/form.html GET 요청 시, webapp/user 디렉토리의 form.html 파일을 응답한다.
    - form.html 파일안에서 POST로 회원가입 요청을 한다.(POST user/create)
@@ -97,3 +99,8 @@
 5. css 파일을 지원한다 지원한다.
     - http://localhost:8080/css/styles.css GET 요청시, .css 를 응답해준다.
  
+### 웹 서버 리팩토링 하기
+1. HttpRequest & HttpResponse 를 활용하여 요청 데이터 처리와 응답 데이터 처리의 책임을 분리한다.
+2. 다형성을 활용하여 클라이언트 요청 URL 에 대한 분기 처리를 제거한다
+   - Controller 인터페이스와 AbstractController 추상클래스를 활용해 분기문을 분리한다.
+   - Map<String, Controller> controllers 를 통해 url 에대한 Controller 구체 클래스들을 맵핑한다.
