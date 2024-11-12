@@ -1,6 +1,7 @@
 package request;
 
-import exception.BaseException;
+import com.yjh.exception.BaseException;
+import com.yjh.request.HttpMethod;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
