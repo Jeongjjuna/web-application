@@ -1,6 +1,6 @@
 package request;
 
-import com.yjh.request.HttpRequestParser;
+import org.apache.coyote.http11.request.HttpRequestParser;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

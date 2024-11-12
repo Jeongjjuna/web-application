@@ -1,7 +1,7 @@
 package request;
 
-import com.yjh.request.HttpMethod;
-import com.yjh.request.HttpRequest;
+import org.apache.coyote.http11.request.HttpMethod;
+import org.apache.coyote.http11.request.HttpRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package com.yjh.response;
+package org.apache.coyote.http11.response;
 
 import com.yjh.exception.BaseException;
 import org.slf4j.Logger;

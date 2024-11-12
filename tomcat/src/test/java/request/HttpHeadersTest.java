@@ -1,6 +1,6 @@
 package request;
 
-import com.yjh.request.HttpHeaders;
+import org.apache.coyote.http11.request.HttpHeaders;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

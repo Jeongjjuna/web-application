@@ -5,8 +5,8 @@ import com.yjh.exception.BaseException;
 import com.yjh.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.yjh.request.HttpRequest;
-import com.yjh.response.HttpResponse;
+import org.apache.coyote.http11.request.HttpRequest;
+import org.apache.coyote.http11.response.HttpResponse;
 
 public class LoginController extends AbstractController {
 

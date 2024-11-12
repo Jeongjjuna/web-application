@@ -1,7 +1,7 @@
 package com.yjh.controller;
 
-import com.yjh.request.HttpRequest;
-import com.yjh.response.HttpResponse;
+import org.apache.coyote.http11.request.HttpRequest;
+import org.apache.coyote.http11.response.HttpResponse;
 
 public interface Controller {
 

@@ -1,6 +1,6 @@
 package response;
 
-import com.yjh.response.HttpResponse;
+import org.apache.coyote.http11.response.HttpResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
