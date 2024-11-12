@@ -3,10 +3,11 @@ package com.yjh.controller;
 import com.yjh.db.DataBase;
 import com.yjh.exception.BaseException;
 import com.yjh.model.User;
+import org.apache.coyote.http11.request.HttpRequest;
+import org.apache.coyote.http11.request.HttpSession;
+import org.apache.coyote.http11.response.HttpResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.coyote.http11.request.HttpRequest;
-import org.apache.coyote.http11.response.HttpResponse;
 
 public class LoginController extends AbstractController {
 
@@ -25,7 +26,8 @@ public class LoginController extends AbstractController {
                 throw new BaseException("[ERROR] Wrong Password");
             }
 
-            response.addHeader("Set-Cookie", "logined=true");
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
             response.sendRedirect("/user/login.html");
         } catch (BaseException e) {
             log.error(e.getMessage());

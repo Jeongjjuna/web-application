@@ -1,11 +1,12 @@
 package org.apache.coyote.http11.request;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 public class HttpHeaders {
+
+    private static final String COOKIE = "Cookie";
 
     private final Map<String, String> headers;
 
@@ -19,11 +20,11 @@ public class HttpHeaders {
     }
 
     public boolean isLogined() {
-        return Optional.ofNullable(headers.get("Cookie"))
-                .map(cookies -> cookies.split(", "))
-                .stream()
-                .flatMap(Arrays::stream)
-                .anyMatch(cookie -> cookie.equals("logined=true"));
+        HttpSession session = getSessions();
+        if (session != null) {
+            return true;
+        }
+        return true;
     }
 
     public int getContentLength() {
@@ -34,5 +35,15 @@ public class HttpHeaders {
 
     public String getHeader(String key) {
         return headers.get(key);
+    }
+
+    public HttpCookies getCookies() {
+        return new HttpCookies(getHeader(COOKIE));
+    }
+
+    public HttpSession getSessions() {
+        HttpCookies cookies = getCookies();
+        String sessionId = cookies.getCookie("JSESSIONID");
+        return HttpSessions.getOrCreateSession(sessionId);
     }
 }

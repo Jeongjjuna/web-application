@@ -8,6 +8,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HttpRequestParser {
 
@@ -23,6 +26,17 @@ public class HttpRequestParser {
 
     public static String getPath(String url) {
         return url.split("\\?")[0];
+    }
+
+    public static Map<String, String> parseCookies(String cookieLine) {
+        return Stream.of(cookieLine.split(";"))
+                .map(String::trim)
+                .filter(cookieToken -> cookieToken.contains("="))
+                .map(cookieToken -> cookieToken.split("=", 2))
+                .collect(Collectors.toMap(
+                        tokens -> tokens[0].trim(),
+                        tokens -> tokens[1].trim()
+                ));
     }
 
     private static HttpRequestLine getRequestLine(BufferedReader br) throws IOException {
@@ -67,5 +81,4 @@ public class HttpRequestParser {
 
         return httpRequestBody;
     }
-
 }

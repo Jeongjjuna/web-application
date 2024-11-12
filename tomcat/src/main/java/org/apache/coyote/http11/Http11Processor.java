@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.UUID;
 
 public class Http11Processor implements Runnable, Processor {
 
@@ -37,8 +38,11 @@ public class Http11Processor implements Runnable, Processor {
             HttpRequest httpRequest = HttpRequest.of(in);
             HttpResponse httpResponse = HttpResponse.of(out);
 
-            String path = httpRequest.getPath();
+            if (httpRequest.getSession() == null) {
+                httpResponse.addHeader("Set-Cookie", "JSESSIONID=" + UUID.randomUUID());
+            }
 
+            String path = httpRequest.getPath();
             Controller controller = RequestMapping.getController(path);
 
             /**

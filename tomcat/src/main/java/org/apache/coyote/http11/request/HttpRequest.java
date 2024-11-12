@@ -55,4 +55,8 @@ public class HttpRequest {
     public HttpMethod getMethod() {
         return httpRequestLine.getMethod();
     }
+
+    public HttpSession getSession() {
+        return httpHeaders.getSessions();
+    }
 }
