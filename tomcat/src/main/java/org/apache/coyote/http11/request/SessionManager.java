@@ -10,17 +10,17 @@ import java.util.UUID;
  */
 public class SessionManager {
 
-    private static Map<String, HttpSession> sessions = new HashMap<>();
+    private SessionManager() {
+        throw new IllegalStateException("[ERROR] 정적 세션 저장소의 인스턴스 생성 불가");
+    }
+
+    private static final Map<String, HttpSession> sessions = new HashMap<>();
 
     public static HttpSession create() {
         String sessionId = UUID.randomUUID().toString();
         HttpSession session = new HttpSession(sessionId);
         sessions.put(sessionId, session);
         return session;
-    }
-
-    public static void remove(String id) {
-        sessions.remove(id);
     }
 
     public static boolean isLogin(String jSessionId) {
