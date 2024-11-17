@@ -26,8 +26,10 @@ public class LoginController extends AbstractController {
                 throw new BaseException("[ERROR] Wrong Password");
             }
 
-            HttpSession session = request.getSession();
+            HttpSession session = request.createSession();
             session.setAttribute("user", user);
+            response.setJessionCookie(session.getJSessionId());
+
             response.sendRedirect("/user/login.html");
         } catch (BaseException e) {
             log.error(e.getMessage());

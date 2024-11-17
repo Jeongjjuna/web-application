@@ -1,6 +1,7 @@
 package org.apache.coyote.http11.request;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class HttpCookies {
 
@@ -14,7 +15,7 @@ public class HttpCookies {
         return cookies.get(name);
     }
 
-    public String getCookie(String name) {
-        return cookies.get(name);
+    public Optional<String> getCookie(String name) {
+        return Optional.ofNullable(cookies.get(name));
     }
 }
