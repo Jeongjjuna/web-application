@@ -18,9 +18,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import static org.apache.coyote.http11.request.HttpHeaders.JSESSIONID;
+
 public class HttpResponse {
 
     private static final Logger log = LoggerFactory.getLogger(HttpResponse.class);
+
+    private static final String SET_COOKIES = "Set-Cookie";
 
     private final Map<String, String> headers = new HashMap<>();
     private final DataOutputStream dos;
@@ -124,5 +128,9 @@ public class HttpResponse {
                 .getResource("./webapp" + path);
 
         return Objects.requireNonNull(resourceUrl, "[ERROR] Not Found Resource : " + path);
+    }
+
+    public void setJessionCookie(String jSessionId) {
+        addHeader(SET_COOKIES, JSESSIONID + "=" + jSessionId);
     }
 }

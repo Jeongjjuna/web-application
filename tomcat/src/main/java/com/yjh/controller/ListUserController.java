@@ -11,6 +11,7 @@ public class ListUserController extends AbstractController {
 
     @Override
     protected void doGet(HttpRequest request, HttpResponse response) {
+
         if (!request.isLogined()) {
             response.sendRedirect("/index.html");
             return;

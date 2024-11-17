@@ -1,14 +1,12 @@
 package org.apache.coyote.http11.request;
 
-import java.io.IOException;
-
 public class HttpRequestLine {
 
     private final HttpMethod method;
     private final String url;
     private final String version;
 
-    public HttpRequestLine(String[] lineTokens) throws IOException {
+    public HttpRequestLine(String[] lineTokens) {
         this.method = HttpMethod.create(lineTokens[0]);
         this.url = lineTokens[1];
         this.version = lineTokens[2];

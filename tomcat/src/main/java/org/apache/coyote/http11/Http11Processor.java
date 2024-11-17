@@ -3,10 +3,10 @@ package org.apache.coyote.http11;
 import com.yjh.controller.Controller;
 import com.yjh.exception.BaseException;
 import org.apache.coyote.Processor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.coyote.http11.request.HttpRequest;
 import org.apache.coyote.http11.response.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +38,6 @@ public class Http11Processor implements Runnable, Processor {
             HttpResponse httpResponse = HttpResponse.of(out);
 
             String path = httpRequest.getPath();
-
             Controller controller = RequestMapping.getController(path);
 
             /**
