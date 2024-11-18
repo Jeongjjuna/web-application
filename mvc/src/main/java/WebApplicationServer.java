@@ -1,6 +1,27 @@
+import org.apache.catalina.connector.Connector;
+import org.apache.catalina.startup.Tomcat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+
 public class WebApplicationServer {
-    
-    public static void main(String[] args) {
-        System.out.println("mvc 프레임워크 만들기");
+
+    private static final Logger log = LoggerFactory.getLogger(WebApplicationServer.class);
+
+    public static void main(String[] args) throws Exception {
+        final String webappDirLocation = "mvc/webapps/";
+        final Tomcat tomcat = new Tomcat();
+
+        Connector connector = new Connector();
+        connector.setPort(8080);
+
+        tomcat.setConnector(connector);
+
+        tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
+        log.info("configuring app with baseDir: {}", new File(webappDirLocation).getAbsolutePath());
+
+        tomcat.start();
+        tomcat.getServer().await();
     }
 }
