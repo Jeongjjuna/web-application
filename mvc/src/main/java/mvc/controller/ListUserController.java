@@ -2,13 +2,12 @@ package mvc.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mvc.view.ThymeleafView;
-import mvc.view.View;
+import mvc.view.ModelAndView;
 
-public class ListUserController implements Controller {
+public class ListUserController extends AbstractController {
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return new ThymeleafView("redirect:/home");
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return thymeleafView("redirect:/home");
     }
 }

@@ -3,15 +3,13 @@ package mvc.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mvc.model.User;
-import mvc.view.JsonView;
-import mvc.view.View;
+import mvc.view.ModelAndView;
 
-public class JsonController implements Controller {
+public class JsonController extends AbstractController {
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
         User userModel = new User("name", 10);
-        request.setAttribute("user", userModel);
-        return new JsonView();
+        return jsonView().addObject("user", userModel);
     }
 }

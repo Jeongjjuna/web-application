@@ -2,13 +2,12 @@ package mvc.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mvc.view.ThymeleafView;
-import mvc.view.View;
+import mvc.view.ModelAndView;
 
-public class NotFoundController implements Controller {
+public class NotFoundController extends AbstractController {
 
     @Override
-    public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return new ThymeleafView("default");
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return thymeleafView("default");
     }
 }

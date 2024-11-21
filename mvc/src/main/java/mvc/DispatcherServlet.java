@@ -5,9 +5,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mvc.controller.Controller;
+import mvc.controller.InterfaceController;
 import mvc.mapping.RequestMapping;
 import mvc.thymeleaf.ThymeleafConfig;
+import mvc.view.ModelAndView;
 import mvc.view.View;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +31,12 @@ public class DispatcherServlet extends HttpServlet {
         log.info("DispatcherServlet -> service() 호출");
 
         String requestUri = request.getRequestURI();
-        Controller controller = requestMapping.getController(requestUri);
+        InterfaceController controller = requestMapping.getController(requestUri);
 
         try {
-            View view = controller.execute(request, response);
-            view.render(request, response);
+            ModelAndView modelAndView = controller.execute(request, response);
+            View view = modelAndView.getView();
+            view.render(modelAndView.getModel(), request, response);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
