@@ -2,8 +2,9 @@ package mvc.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mvc.view.View;
 
 public interface Controller {
 
-    String execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
+    View execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }

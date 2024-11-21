@@ -1,14 +1,32 @@
 package mvc.thymeleaf;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 public class ThymeleafConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(ThymeleafConfig.class);
+
+    private static TemplateEngine templateEngine = null;
+
     private ThymeleafConfig() {
     }
 
-    public static TemplateEngine getTemplateEngine() {
+    public static void initialize() {
+        log.info("ThymeleafTemplate -> 초기화");
+        templateEngine = getTemplateEngine();
+    }
+
+    public static TemplateEngine getTemplateInstance() {
+        if (templateEngine == null) {
+            throw new IllegalStateException("[ERROR] TemplateEngine이 초기화되지 않았습니다. initialize() 메서드를 호출하세요.");
+        }
+        return templateEngine;
+    }
+
+    private static TemplateEngine getTemplateEngine() {
         ClassLoaderTemplateResolver templateResolver = getClassLoaderTemplateResolver();
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
@@ -24,3 +42,4 @@ public class ThymeleafConfig {
         return templateResolver;
     }
 }
+

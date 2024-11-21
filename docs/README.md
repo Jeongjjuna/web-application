@@ -190,3 +190,5 @@ public class DispatcherServlet extends HttpServlet {
 1. 프론트 컨트롤러 패턴을 활용하여 MVC 구조 만들기 
    - 서블릿으로 디스패처 서블릿 만들기
    - Controller 를 추상화시키고, RequestMapping 을 활용하여 알맞은 컨트롤러로 동작하도록 한다.
+2. 텔플릿(view) 외에 Json 데이터도 응답할 수 있도록 개선
+   - View 인터페이스를 활용(ThyemleafView, JsonView)

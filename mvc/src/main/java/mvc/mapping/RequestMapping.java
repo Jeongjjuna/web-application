@@ -2,6 +2,7 @@ package mvc.mapping;
 
 import mvc.controller.Controller;
 import mvc.controller.HomeController;
+import mvc.controller.JsonController;
 import mvc.controller.ListUserController;
 import mvc.controller.NotFoundController;
 
@@ -30,6 +31,7 @@ public class RequestMapping {
     private void initMappings() {
         setUpController("/home", new HomeController());
         setUpController("/list", new ListUserController());
+        setUpController("/json", new JsonController());
     }
 
     private void setUpController(String url, Controller controller) {

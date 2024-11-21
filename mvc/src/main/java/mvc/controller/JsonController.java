@@ -2,13 +2,16 @@ package mvc.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mvc.view.ThymeleafView;
+import mvc.model.User;
+import mvc.view.JsonView;
 import mvc.view.View;
 
-public class NotFoundController implements Controller {
+public class JsonController implements Controller {
 
     @Override
     public View execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return new ThymeleafView("default");
+        User userModel = new User("name", 10);
+        request.setAttribute("user", userModel);
+        return new JsonView();
     }
 }
