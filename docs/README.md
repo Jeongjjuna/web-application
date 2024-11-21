@@ -3,7 +3,7 @@
 - [자바 웹 프로그래밍 Next Step(박재성님)](https://product.kyobobook.co.kr/detail/S000001624682) 책을 보며 학습합니다.
 
 ---
-## 🌱 새로 알게된 학습 내용
+## 🌱 새로 알게된 학습 내용 [WebApplication]
 
 <details>
     <summary> [요구사항 1] - java I/O </summary>
@@ -118,7 +118,7 @@
 </details>
 
 ---
-## 요구사항
+## WebApplication 만들기 요구사항
 
 ### 웹 서버 구현
 1. http://localhost:8080/index.html GET 요청 시, webapp디렉토리의 index.html 파일을 응답한다.
@@ -145,3 +145,48 @@
 2. 다형성을 활용하여 클라이언트 요청 URL 에 대한 분기 처리를 제거한다
    - Controller 인터페이스와 AbstractController 추상클래스를 활용해 분기문을 분리한다.
    - Map<String, Controller> controllers 를 통해 url 에대한 Controller 구체 클래스들을 맵핑한다.
+
+
+---
+## 🌱 새로 알게된 학습 내용 [MVC 프레임워크]
+<details>
+    <summary> [요구사항 1] - @WebServlet 어노테이션 </summary>
+
+```java
+@WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
+public class DispatcherServlet extends HttpServlet {
+
+    private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
+
+    @Override
+    protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.info("DispatcherServlet->service()");
+    }
+}
+```
+- urlPatterns 를 "/"로 설정해서 모든 요청이 이 서블릿으로 들어오도록 한다.
+  - 즉, 여기서 DispatcherServlet 은 어떤 요청이든 전부 받아들여서 service() 메서드를 호출한다.
+- loadOnStartup 은 뭘까?
+  - 정수값을 가지며 서블릿 초기화 순서를 나타낸다.(숫자가 낮을수록 먼저 초기화 된다)
+  - 만약 지정해주지 않으면 첫 요청이 들어올 때 초기화 되어버린다.
+    - 첫 요청시 서블릿이 초기화 되는 비용으로 인해 속도가 느려질 수 도 있다.(그래서 미리 초기화하는 것)
+
+</details>
+
+<details>
+    <summary> [요구사항 1] - forward 방식와 redirect 방식 </summary>
+
+- 리다이렉트 경로로 요청이 들어오면 2가지 방식으로 처리하는 방법을 생각해볼 수 있다.
+  - redirect : 클라이언트(브라우저)에게 302 응답과 Location(리다이렉트할 url) 정보를 응답해주고, 새로운 경로로 요청을 유도한다.
+    - 이 경우 브라우저는 302 응답을 받고 곧바로 서버에게 새로운 경로로 요청을 보낸다.
+    - 새롭게 요청을 보내기 때문에 브라우저의 주소창이 새로운 리다이렉트 경로로 변경된다.
+  - forward : 서버내부에서 리다이렉트 경로를 찾아내고 곧바로 리다이렉트 경로로 서블릿에게 요청하거나 뷰를 반환한다.
+    - 이 경우에는 브라우저상의 요청 주소값이 리다이렉트된 값으로 변경되지 않는다.
+</details>
+
+---
+
+## MVC 프레임워크 만들기 요구사항
+1. 프론트 컨트롤러 패턴을 활용하여 MVC 구조 만들기 
+   - 서블릿으로 디스패처 서블릿 만들기
+   - Controller 를 추상화시키고, RequestMapping 을 활용하여 알맞은 컨트롤러로 동작하도록 한다.
