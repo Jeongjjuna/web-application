@@ -1,6 +1,7 @@
 package mvc.model;
 
 public class User {
+
     private final String name;
     private final int age;
 

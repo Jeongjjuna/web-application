@@ -19,10 +19,11 @@ public class DispatcherServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private RequestMapping requestMapping;
+
     @Override
     public void init() throws ServletException {
         log.info("DispatcherServlet -> 초기화");
-        this.requestMapping = new RequestMapping();
+        requestInfoInitialize();
         ThymeleafConfig.initialize();
     }
 
@@ -42,5 +43,8 @@ public class DispatcherServlet extends HttpServlet {
         }
     }
 
+    private void requestInfoInitialize() {
+        this.requestMapping = new RequestMapping();
+    }
 
 }

@@ -18,6 +18,7 @@ public class ThymeleafView implements View {
 
     private static final Logger log = LoggerFactory.getLogger(ThymeleafView.class);
     private static final String REDIRECT_PREFIX = "redirect:";
+    public static final String CONTENT_TYPE_HTML = "text/html;charset=UTF-8";
 
     private final String viewName;
 
@@ -29,20 +30,20 @@ public class ThymeleafView implements View {
     @Override
     public void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
         if (viewName.startsWith(REDIRECT_PREFIX)) {
-            log.info("DispatcherServlet -> redirect");
+            log.info("-> redirect");
             response.sendRedirect(viewName.substring(REDIRECT_PREFIX.length()));
             return;
         }
 
-        Context context = createThymeleafContext(model);
-
-        forward(viewName, context, response);
+        forward(viewName, model, response);
     }
 
-    private void forward(String viewName, Context context, HttpServletResponse response) throws IOException {
+    private void forward(String viewName, Map<String, ?> model, HttpServletResponse response) throws IOException {
         TemplateEngine templateEngine = ThymeleafConfig.getTemplateInstance();
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType(CONTENT_TYPE_HTML);
         PrintWriter writer = response.getWriter();
+
+        Context context = createThymeleafContext(model);
         templateEngine.process(viewName, context, writer);
     }
 

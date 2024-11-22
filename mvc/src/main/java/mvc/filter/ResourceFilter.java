@@ -20,7 +20,6 @@ import java.util.List;
 public class ResourceFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(ResourceFilter.class);
-
     private static final List<String> resourcePrefixs = new ArrayList<>();
 
     static {
@@ -44,7 +43,7 @@ public class ResourceFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         String path = req.getRequestURI().substring(req.getContextPath().length());
         if (isResourceUrl(path)) {
-            log.debug("정적 리소스 요청 : {}", path);
+            log.info("request static resource : {}", path);
             defaultRequestDispatcher.forward(servletRequest, servletResponse);
             return;
         }
