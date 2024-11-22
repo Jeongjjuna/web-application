@@ -1,7 +1,7 @@
 package mvc.mapping;
 
 import mvc.controller.HomeController;
-import mvc.controller.InterfaceController;
+import mvc.controller.Contoller;
 import mvc.controller.JsonController;
 import mvc.controller.ListUserController;
 import mvc.controller.NotFoundController;
@@ -12,29 +12,29 @@ import java.util.Optional;
 
 public class RequestMapping {
 
-    private final InterfaceController notFoundController = new NotFoundController();
-    private final Map<String, InterfaceController> mappings = new HashMap<>();
+    private final Contoller notFoundController = new NotFoundController();
+    private final Map<String, Contoller> mappings = new HashMap<>();
 
     public RequestMapping() {
         initMappings();
     }
 
-    public InterfaceController getController(String url) {
+    public Contoller getController(String url) {
         return findControllerByUrl(url)
                 .orElse(notFoundController);
     }
 
-    private Optional<InterfaceController> findControllerByUrl(String url) {
+    private Optional<Contoller> findControllerByUrl(String url) {
         return Optional.ofNullable(mappings.get(url));
     }
 
     private void initMappings() {
         setUpController("/home", new HomeController());
         setUpController("/list", new ListUserController());
-        setUpController("/json", new JsonController());
+        setUpController("/api/json", new JsonController());
     }
 
-    private void setUpController(String url, InterfaceController controller) {
+    private void setUpController(String url, Contoller controller) {
         mappings.put(url, controller);
     }
 }

@@ -5,7 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mvc.controller.InterfaceController;
+import mvc.controller.Contoller;
 import mvc.mapping.RequestMapping;
 import mvc.thymeleaf.ThymeleafConfig;
 import mvc.view.ModelAndView;
@@ -31,7 +31,7 @@ public class DispatcherServlet extends HttpServlet {
         log.info("DispatcherServlet -> service() 호출");
 
         String requestUri = request.getRequestURI();
-        InterfaceController controller = requestMapping.getController(requestUri);
+        Contoller controller = requestMapping.getController(requestUri);
 
         try {
             ModelAndView modelAndView = controller.execute(request, response);

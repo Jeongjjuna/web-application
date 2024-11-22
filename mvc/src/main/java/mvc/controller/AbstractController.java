@@ -4,7 +4,7 @@ import mvc.view.JsonView;
 import mvc.view.ModelAndView;
 import mvc.view.ThymeleafView;
 
-public abstract class AbstractController implements InterfaceController {
+public abstract class AbstractController implements Contoller {
 
     protected ModelAndView thymeleafView(String forwardUrl) {
         return new ModelAndView(new ThymeleafView(forwardUrl));
