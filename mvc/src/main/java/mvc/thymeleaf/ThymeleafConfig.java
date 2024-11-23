@@ -15,7 +15,7 @@ public class ThymeleafConfig {
     }
 
     public static void initialize() {
-        log.info("ThymeleafTemplate -> 초기화");
+        log.info("ThymeleafTemplate init");
         templateEngine = getTemplateEngine();
     }
 

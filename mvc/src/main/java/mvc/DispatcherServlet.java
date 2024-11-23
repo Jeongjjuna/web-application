@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mvc.controller.Contoller;
 import mvc.mapping.RequestMapping;
-import mvc.thymeleaf.ThymeleafConfig;
 import mvc.view.ModelAndView;
 import mvc.view.View;
 import org.slf4j.Logger;
@@ -22,9 +21,8 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        log.info("DispatcherServlet -> 초기화");
+        log.info("DispatcherServlet init");
         requestInfoInitialize();
-        ThymeleafConfig.initialize();
     }
 
     @Override
