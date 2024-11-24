@@ -184,9 +184,164 @@ public class DispatcherServlet extends HttpServlet {
     - 이 경우에는 브라우저상의 요청 주소값이 리다이렉트된 값으로 변경되지 않는다.
 </details>
 
+<details>
+    <summary> [요구사항 2] - 톰캣 초기화 과정 </summary>
+
+1. 톰캣 실행시 ServletContext 객체 초기화(jakarta.servlet.ServletContext) → 컨텍스트 리스너의 contextInitialized 메서드 호출
+    - ServletContextListener(인터페이스)를 구현한다.
+    - @WebListener : 서블릿 컨텍스트가 Listener 클래스라고 인식할 수 있게 해준다.
+    - 톰캣 시작 직후 실행되고 초기값 혹은 초기 설정을 정의하는데 사용할 수 있고, 디스패처 서블릿보다 먼저 동작한다.
+
+    ```java
+    @WebListener
+    public class ContextLoaderListener implements ServletContextListener {
+    
+        private static final Logger log = LoggerFactory.getLogger(ContextLoaderListener.class);
+    
+        @Override
+        public void contextInitialized(ServletContextEvent sce) {
+            log.info("Tomcat init");
+    
+            ThymeleafConfig.initialize();
+        }
+    
+        @Override
+        public void contextDestroyed(ServletContextEvent sce) {
+            log.info("Tomcat stopped successfully");
+        }
+    }
+    
+    ```
+
+2. 디스페처 서블릿 초기화 메서드를 실행한다. (loadOnStartup을 1로 설정했기 때문 → 설정 안하면 최초 요청할 때 생성됨.)
+3. 디스페처 초기화시 RequestMapping 인스턴스 생성 및 초기화
+
+</details>
+
+<details>
+    <summary> [요구사항 2] - 톰캣 시작 후 요청시 순서 </summary>
+
+1. 디스패처 서블릿 전에 Filter 를 구현한 doFilter() 메서드를 호출한다.
+   - 아래에는 정적 파일의 경우 디스페처 서블릿으로 보내지 않고,  서블릿 컨텍스트의 default라는 기본 디스페처에 forward 해버린다.
+   - 이 경우 기본 경로로 설정한 webapps 안에서 해당 리소스를 찾아서 응답해주게 된다.
+    ```java
+    @WebFilter("/*")
+    public class ResourceFilter implements Filter {
+    
+        private static final Logger log = LoggerFactory.getLogger(ResourceFilter.class);
+        private static final List<String> resourcePrefixs = new ArrayList<>();
+    
+        static {
+            resourcePrefixs.add("/css");
+            resourcePrefixs.add("/js");
+            resourcePrefixs.add("/fonts");
+            resourcePrefixs.add("/images");
+            resourcePrefixs.add("/favicon.ico");
+        }
+    
+        private RequestDispatcher defaultRequestDispatcher;
+    
+        @Override
+        public void init(FilterConfig filterConfig) throws ServletException {
+            log.info("ResourceFilter init");
+            this.defaultRequestDispatcher = filterConfig.getServletContext().getNamedDispatcher("default");
+        }
+    
+        @Override
+        public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+            HttpServletRequest req = (HttpServletRequest) servletRequest;
+            String path = req.getRequestURI().substring(req.getContextPath().length());
+            if (isResourceUrl(path)) {
+                log.info("request static resource : {}", path);
+                defaultRequestDispatcher.forward(servletRequest, servletResponse);
+                return;
+            }
+    
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
+    
+        @Override
+        public void destroy() {
+            log.info("ResourceFilter destroy");
+        }
+    
+        private boolean isResourceUrl(String url) {
+            return resourcePrefixs.stream()
+                    .anyMatch(url::startsWith);
+        }
+    
+    }
+    ```
+2. “/’로 설정된 디스페처 서블릿의 service() 메서드가 실행된다.
+3. service()에서 각 요청 URL에 해당하는 Controller 타입 객체를 받는다.(RequestMapping 을 통해 가져옴)
+4. Controller의 execute() 메서드를 실행하고, ModelAndView를 반환받는다.
+5. ModelAndView에서 view와 model을 꺼내고, view.render() 메서드에 model을 넘겨준다.
+   - 내부적으로 render는 jsonView, ThymeleafView에 따라 적절히 응답한다.
+
+
+</details>
+
+<details>
+    <summary> [요구사항 2] - 멀티쓰레드 환경에서의 상태값 동시성 문제를 고려하자 </summary>
+
+- 아래의 코드에서 ShowController는 디스페처 서블릿이 인스턴스를 단 1개만 만든다.
+- 하지만 실제 여러 쓰레드의 요청이 들어와 execute()를 실행하면서 필드에 경쟁상태 발생한다.
+```java
+public class ShowController extends AbstractController {
+    private QuestionDao questionDao = new QuestionDao();
+    private AnswerDao answerDao = new AnswerDao();
+    private Question question;
+    private List<Answer> answers;
+
+    @Override
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse response) throws Exception {
+        Long questionId = Long.parseLong(req.getParameter("questionId"));
+
+        question = questionDao.findById(questionId);
+        answers = answerDao.findAllByQuestionId(questionId);
+
+        ModelAndView mav = jspView("/qna/show.jsp");
+        mav.addObject("question", question);
+        mav.addObject("answers", answers);
+        return mav;
+    }
+}
+```
+
+```java
+public class ShowController extends AbstractController {
+    private QuestionDao questionDao = new QuestionDao();
+    private AnswerDao answerDao = new AnswerDao();
+
+    @Override
+    public ModelAndView execute(HttpServletRequest req, HttpServletResponse response) throws Exception {
+        Long questionId = Long.parseLong(req.getParameter("questionId"));
+
+        private Question question = questionDao.findById(questionId);
+        private List<Answer> answers = answerDao.findAllByQuestionId(questionId);
+
+        ModelAndView mav = jspView("/qna/show.jsp");
+        mav.addObject("question", question);
+        mav.addObject("answers", answers);
+        return mav;
+    }
+}
+```
+- 클래스 필드가 상태값을 가진다면 동시성을 항상 주의해야한다.
+  - 상태값을 가지지 않는다면? 싱글톤클래스로 관리하면 효율적이다.
+  - ex) JdbcTemplate, ShowController, Repository 등
+- 결국 스프링 프레임워크에서 Bean으로 관리하는 객체들이 모두 싱글톤인 이유가 바로 이것이다.(상태값을 가지지 않는 공통 사용 클래스들)
+
+</details>
+
+
+
 ---
 
 ## MVC 프레임워크 만들기 요구사항
 1. 프론트 컨트롤러 패턴을 활용하여 MVC 구조 만들기 
    - 서블릿으로 디스패처 서블릿 만들기
    - Controller 를 추상화시키고, RequestMapping 을 활용하여 알맞은 컨트롤러로 동작하도록 한다.
+2. 텔플릿(view) 외에 Json 데이터도 응답할 수 있도록 개선
+   - View 인터페이스를 활용(ThyemleafView, JsonView)
+   - ModelAndView 를 활용한 추상화

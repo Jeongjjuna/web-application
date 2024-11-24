@@ -2,10 +2,11 @@ package mvc.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mvc.view.ModelAndView;
 
 import java.util.Objects;
 
-public class ForwardController implements Controller {
+public class ForwardController extends AbstractController {
 
     private final String forwardUrl;
 
@@ -15,7 +16,7 @@ public class ForwardController implements Controller {
     }
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        return forwardUrl;
+    public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        return thymeleafView(forwardUrl);
     }
 }

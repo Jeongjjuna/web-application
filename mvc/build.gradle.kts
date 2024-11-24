@@ -8,4 +8,7 @@ dependencies {
 
     // 동적 템플릿으로 타임리프 사용
     implementation("org.thymeleaf:thymeleaf:3.1.2.RELEASE")
+
+    // 객체 JSON 변환을 위한 잭슨 라이브러리
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
 }

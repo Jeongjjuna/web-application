@@ -8,20 +8,30 @@ import java.io.File;
 public class WebApplicationServer {
 
     private static final Logger log = LoggerFactory.getLogger(WebApplicationServer.class);
+    private static final String ROOT_PATH = "/";
+    private static final String WEB_APPLICATION_PATH = "mvc/webapps/";
 
     public static void main(String[] args) throws Exception {
-        final String webappDirLocation = "mvc/webapps/";
         final Tomcat tomcat = new Tomcat();
-
-        Connector connector = new Connector();
-        connector.setPort(8080);
-
-        tomcat.setConnector(connector);
-
-        tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
-        log.info("configuring app with baseDir: {}", new File(webappDirLocation).getAbsolutePath());
+        setupTomcat(tomcat);
 
         tomcat.start();
         tomcat.getServer().await();
+    }
+
+    private static void setupTomcat(final Tomcat tomcat) {
+        setupConnector(tomcat);
+        setupContextPath(tomcat);
+    }
+
+    private static void setupConnector(final Tomcat tomcat) {
+        Connector connector = new Connector();
+        connector.setPort(8080);
+        tomcat.setConnector(connector);
+    }
+
+    private static void setupContextPath(final Tomcat tomcat) {
+        tomcat.addWebapp(ROOT_PATH, new File(WEB_APPLICATION_PATH).getAbsolutePath());
+        log.info("configuring app with baseDir: {}", new File(WEB_APPLICATION_PATH).getAbsolutePath());
     }
 }
