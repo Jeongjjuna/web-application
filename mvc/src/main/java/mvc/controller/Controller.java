@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mvc.view.ModelAndView;
 
-public interface Contoller {
+public interface Controller {
 
     ModelAndView execute(HttpServletRequest request, HttpServletResponse response) throws Exception;
 }
