@@ -1,4 +1,4 @@
-package mvc.thymeleaf;
+package mvc.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,7 +2,7 @@ package mvc.view;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import mvc.thymeleaf.ThymeleafConfig;
+import mvc.config.ThymeleafConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;

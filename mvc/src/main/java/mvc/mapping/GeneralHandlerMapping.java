@@ -1,7 +1,5 @@
 package mvc.mapping;
 
-import mvc.HandlerKey;
-import mvc.RequestMethod;
 import mvc.controller.Controller;
 import mvc.controller.HomeController;
 import mvc.controller.JsonController;

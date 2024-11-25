@@ -1,4 +1,4 @@
-package mvc;
+package mvc.mapping;
 
 public enum RequestMethod {
     GET,

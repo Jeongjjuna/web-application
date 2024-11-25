@@ -3,7 +3,7 @@ package mvc;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import mvc.thymeleaf.ThymeleafConfig;
+import mvc.config.ThymeleafConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
