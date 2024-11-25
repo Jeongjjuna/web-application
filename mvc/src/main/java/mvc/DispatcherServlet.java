@@ -20,7 +20,6 @@ import java.util.List;
 
 @WebServlet(name = "dispatcher", urlPatterns = "/", loadOnStartup = 1)
 public class DispatcherServlet extends HttpServlet {
-
     private static final Logger log = LoggerFactory.getLogger(DispatcherServlet.class);
 
     private List<HandlerMapping> handlerMappings;
@@ -33,7 +32,7 @@ public class DispatcherServlet extends HttpServlet {
         GeneralHandlerMapping rhm = new GeneralHandlerMapping();
         rhm.initMappings();
 
-        AnnotationHandlerMapping ahm = new AnnotationHandlerMapping();
+        AnnotationHandlerMapping ahm = new AnnotationHandlerMapping("mvc");
         ahm.initMappings();
 
         this.handlerMappings = List.of(rhm, ahm);

@@ -11,4 +11,7 @@ dependencies {
 
     // 객체 JSON 변환을 위한 잭슨 라이브러리
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
+
+    // 리플렉션 라이브러리
+    implementation("org.reflections:reflections:0.10.2")
 }
